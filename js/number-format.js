@@ -1,48 +1,36 @@
 
-var format_number = function (theStr) {
-    var delim = ' ',
-    	dots = ['.', ','],
-    	integ = '', 
-    	fract = '',
-    	addit = '',
-    	temp = [],
-    	parts = [],
-    	dot, ch, i, j;
-    
-    theStr = String(theStr).replace(/[^\d\.\,]+/g, '')
-    	.replace(/\.+/g, '.')
-    	.replace(/\,+/g, ',');
-
-    for (i in dots) {
-    	dot = dots[i];
-        if (theStr.indexOf(dot) != -1) {
-        	parts = theStr.split(dot);
-        	break;
-        }
-    }
-    
-    if (parts.length > 1) {
-        integ = parts.shift();
-        fract = parts.join(dot);
-    }
-    else {
-    	integ = theStr;
-    }
-    
-    for (i = integ.length - 1, j = 0; i >= 0; i--, j++) {
+var number_format = function (value, decimal) {
+	var delim = ' ', parts, integ, fract, i, j, ch;
+	
+	if (typeof value === 'string') {
+		value = parseFloat(value) || 0;
+	}
+	else if (typeof value !== 'number') {
+		value = 0;
+	}
+	
+	if (typeof decimal === 'number') {
+		value = value.toFixed(decimal);
+	} 
+	else {
+		value = String(value);
+	}
+	
+	// убрать сие
+	var parts = value.split('.'),
+		integ = parts.shift();
+	if (parts.length > 0) {
+		parts.unshift('.');
+	}
+	for (i = integ.length - 1, j = 0; i >= 0; i--, j++) {
         ch = integ[i];
         if (ch.charCodeAt(0) < 48 || ch.charCodeAt(0) > 57) {
-            temp.unshift(ch);
             j--;
             continue;
         }
         addit = (j % 3 == 0 && j != 0) ? delim : '';
-        temp.unshift(ch, addit);
+        parts.unshift(ch, addit);
     }
-    
-    if (fract != '') {
-    	temp.push(dot, fract);
-    }
-    
-    return temp.join('');
+	
+	return parts.join('');
 };
