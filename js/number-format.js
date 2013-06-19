@@ -1,6 +1,9 @@
 
 var number_format = function (value, decimal) {
-	var delim = ' ', parts, integ, fract, i, j, ch;
+	var delim = ' ',
+		buff = '',
+		sep = '.',
+		sepIndex, integ, fract, i, j, ch;
 	
 	if (typeof value === 'string') {
 		value = parseFloat(value) || 0;
@@ -16,21 +19,27 @@ var number_format = function (value, decimal) {
 		value = String(value);
 	}
 	
-	// убрать сие
-	var parts = value.split('.'),
-		integ = parts.shift();
-	if (parts.length > 0) {
-		parts.unshift('.');
+	sepIndex = value.indexOf(sep);
+	if (sepIndex !== -1) {
+		integ = value.substr(0, sepIndex);
+		fract = value.substr(sepIndex);
+	} else {
+		integ = value;
+		fract = '';
 	}
+	
 	for (i = integ.length - 1, j = 0; i >= 0; i--, j++) {
         ch = integ[i];
         if (ch.charCodeAt(0) < 48 || ch.charCodeAt(0) > 57) {
             j--;
+            buff = ch + buff;
             continue;
         }
-        addit = (j % 3 == 0 && j != 0) ? delim : '';
-        parts.unshift(ch, addit);
+        if (j % 3 == 0 && j != 0) {
+        	buff = delim + buff;
+        }
+        buff = ch + buff;
     }
 	
-	return parts.join('');
+	return buff + fract;
 };
