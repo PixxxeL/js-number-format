@@ -6,7 +6,7 @@ var number_format = function (value, decimal) {
 		sepIndex, integ, fract, i, j, ch;
 	
 	if (typeof value === 'string') {
-		value = parseFloat(value) || 0;
+		value = parseFloat(value.replace(/\s+/g, '')) || 0;
 	}
 	else if (typeof value !== 'number') {
 		value = 0;
