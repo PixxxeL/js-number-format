@@ -1,5 +1,5 @@
 /**
- * Format digit by space after every 3 signs in integer part
+ * Format digits by space after every 3 signs in integer part
  * 
  * @param {*}value	any value for formatting
  * @param {int}decimal	decimal digits after separator (usually dot)
